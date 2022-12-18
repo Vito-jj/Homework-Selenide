@@ -1,5 +1,6 @@
 package ru.netology.test;
 
+import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -11,7 +12,7 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Selenide.*;
 
-public class appointmentDateFormTest {
+public class AppointmentDateFormTest {
 
     public String generateDate(int days) {
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
@@ -30,7 +31,9 @@ public class appointmentDateFormTest {
         $("span[data-test-id=phone] input").setValue("+79967878484");
         $("label[data-test-id=agreement]").click();
         $x("//span[contains(text(), 'Забронировать')]").click();
-        $("div[data-test-id=notification]").should(appear, Duration.ofMillis(15000));
+        $("div[data-test-id=notification]")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
 
     }
 
